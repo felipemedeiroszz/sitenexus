@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>NexusPay — O Futuro das Transações</title>
+  <meta name="description" content="NexusPay: gateway de pagamento com segurança de ponta, velocidade extrema e tecnologia futurista." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="IMG/SETA.png" type="image/png" />
+</head>
+<body>
+  <!-- Preloader -->
+  <div id="preloader">
+    <img src="IMG/NEXUS PAY.png" alt="NexusPay" class="preloader-logo" />
+    <div class="glitch-line"></div>
+  </div>
+
+  <!-- Background canvas / grid -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Header -->
+  <header class="container">
+    <div class="brand">
+      <img src="IMG/NEXUS PAY.png" alt="NexusPay logo" class="logo" />
+    </div>
+    <nav>
+      <a href="#features">Recursos</a>
+      <a href="#how">Como funciona</a>
+      <a href="#testimonials">Clientes</a>
+      <a href="#contact">Contato</a>
+      <a href="#cta-final" class="cta small">Comece Agora</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="container hero-inner">
+      <h1 class="headline" data-animate>
+        O Futuro das Transações. Conectado.
+      </h1>
+      <p class="subhead" data-animate data-delay="100">
+        Integre nosso gateway de pagamento com segurança de ponta e processe transações na velocidade da luz.
+      </p>
+      <div class="hero-actions" data-animate data-delay="200">
+        <a href="#cta-final" id="cta-primary" class="cta">Comece Agora</a>
+        <a href="#how" class="link-docs">Ver Documentação</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="plexus" id="plexus"></div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features container" id="features">
+    <h2 class="section-title" data-animate>Por que NexusPay</h2>
+    <div class="cards">
+      <article class="card" data-animate>
+        <div class="icon neon">
+          <img src="IMG/segurança.png" alt="Segurança" />
+        </div>
+        <h3>Segurança de Nível Superior</h3>
+        <p>Criptografia avançada, detecção de fraude em tempo real e conformidade total com PCI DSS.</p>
+      </article>
+      <article class="card" data-animate data-delay="100">
+        <div class="icon neon">
+          <img src="IMG/velocidade.png" alt="Velocidade" />
+        </div>
+        <h3>Velocidade de Transação</h3>
+        <p>Arquitetura de baixa latência para autorizações e liquidações em milissegundos.</p>
+      </article>
+      <article class="card" data-animate data-delay="200">
+        <div class="icon neon">
+          <img src="IMG/integração.png" alt="Integração" />
+        </div>
+        <h3>Integração Fácil</h3>
+        <p>SDKs claros e APIs REST/GraphQL com exemplos prontos e sandbox de testes.</p>
+      </article>
+      <article class="card" data-animate data-delay="300">
+        <div class="icon neon">
+          <img src="IMG/taxasa.png" alt="Taxas" />
+        </div>
+        <h3>Taxas Transparentes</h3>
+        <p>Sem surpresas: preços claros, relatórios detalhados e otimização de custos.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="how" id="how">
+    <div class="container">
+      <h2 class="section-title" data-animate>Como Funciona</h2>
+      <div class="flow" data-animate>
+        <svg class="flow-diagram" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="neon" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#39FF14"/>
+              <stop offset="100%" stop-color="#00D4FF"/>
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <g stroke="url(#neon)" stroke-width="2" fill="none" filter="url(#glow)">
+            <rect x="30" y="60" width="160" height="100" rx="10" ry="10" class="node"/>
+            <rect x="320" y="60" width="160" height="100" rx="10" ry="10" class="node"/>
+            <rect x="610" y="60" width="160" height="100" rx="10" ry="10" class="node"/>
+            <path class="pulse-line" d="M190 110 C 240 110, 270 110, 320 110"/>
+            <path class="pulse-line" d="M480 110 C 530 110, 560 110, 610 110"/>
+          </g>
+          <g fill="#FFFFFF">
+            <text x="110" y="118" text-anchor="middle" class="node-label">Checkout</text>
+            <text x="400" y="118" text-anchor="middle" class="node-label">NexusPay</text>
+            <text x="690" y="118" text-anchor="middle" class="node-label">Banco</text>
+          </g>
+        </svg>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <pre><code id="code-demo">npm i @nexuspay/sdk
+
+import { Nexus } from '@nexuspay/sdk'
+
+const nx = new Nexus({ apiKey: 'SEU_API_KEY' })
+
+const result = await nx.payments.charge({
+  amount: 1990,
+  currency: 'BRL',
+  cardToken: 'tok_***',
+  metadata: { orderId: 'NP-8421' }
+})
+
+console.log(result.status) // 'authorized'</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <h2 class="section-title" data-animate>O que dizem nossos clientes</h2>
+      <div class="carousel" data-animate>
+        <button class="nav prev" aria-label="Anterior">&#10094;</button>
+        <div class="track">
+          <div class="slide active">
+            <p>“Aumentamos a taxa de aprovação em 14% com a NexusPay. Integração simples e performance incrível.”</p>
+            <div class="author">Marina Alves — CTO, LumenShop</div>
+          </div>
+          <div class="slide">
+            <p>“Suporte impecável e uma plataforma robusta. A latência caiu drasticamente.”</p>
+            <div class="author">Rafael Costa — Head de Pagamentos, VelozBank</div>
+          </div>
+          <div class="slide">
+            <p>“Transparência nas taxas e dashboards completos. Decisão fácil para nosso time.”</p>
+            <div class="author">Ana Ribeiro — CFO, NovaMarket</div>
+          </div>
+        </div>
+        <button class="nav next" aria-label="Próximo">&#10095;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Final -->
+  <section class="cta-final" id="cta-final">
+    <div class="container">
+      <h2 data-animate>Pronto para acelerar seus pagamentos?</h2>
+      <p data-animate data-delay="100">Integre o NexusPay hoje mesmo e ofereça a melhor experiência para seus clientes.</p>
+      <div class="actions" data-animate data-delay="200">
+        <a href="#how" class="cta alt">Ver Documentação</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-head">
+        <h2 data-animate>Entre em Contato</h2>
+        <p data-animate data-delay="100">Envie uma mensagem e retornaremos rapidamente pelo WhatsApp.</p>
+      </div>
+      <form id="contact-form" class="contact-form" data-animate data-delay="200">
+        <div class="row">
+          <label>
+            <span>Seu nome</span>
+            <input type="text" id="ct-name" name="name" placeholder="Seu nome" required />
+          </label>
+          <label>
+            <span>E-mail</span>
+            <input type="email" id="ct-email" name="email" placeholder="voce@exemplo.com" required />
+          </label>
+        </div>
+        <label>
+          <span>Assunto</span>
+          <input type="text" id="ct-subject" name="subject" placeholder="Assunto (opcional)" />
+        </label>
+        <label>
+          <span>Mensagem</span>
+          <textarea id="ct-message" name="message" rows="4" placeholder="Conte como podemos ajudar" required></textarea>
+        </label>
+        <button type="submit" class="cta" id="ct-submit">Enviar</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <span> 2023 NexusPay. Todos os direitos reservados.</span>
+      <div class="footer-links">
+        <a href="#">Termos</a>
+        <a href="#">Privacidade</a>
+        <a href="#">Status</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
