@@ -23,31 +23,60 @@
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
   <!-- Header -->
-  <header class="container">
-    <div class="brand">
-      <img src="IMG/NEXUS PAY.png" alt="NexusPay logo" class="logo" />
+  <header>
+    <div class="container">
+      <div class="brand">
+        <img src="IMG/NEXUS PAY.png" alt="NexusPay logo" class="logo" />
+      </div>
+      <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <img src="menu.png" alt="Menu" class="menu-icon">
+      </button>
+      <nav class="main-nav">
+        <a href="#features" data-i18n="nav.features">Recursos</a>
+        <a href="#how" data-i18n="nav.how">Como funciona</a>
+        <a href="#testimonials" data-i18n="nav.testimonials">Clientes</a>
+        <a href="#contact" data-i18n="nav.contact">Contato</a>
+        <a href="#cta-final" class="cta small" data-i18n="nav.start">Comece Agora</a>
+        <!-- Language switcher (mobile inside menu) -->
+        <div class="lang-switcher mobile-only" aria-label="Selecionar idioma">
+          <button class="lang" data-lang="pt" title="Português">
+            <img src="IMG/portugues.png" alt="Português" />
+          </button>
+          <button class="lang" data-lang="en" title="English">
+            <img src="IMG/ingles.png" alt="English" />
+          </button>
+          <button class="lang" data-lang="es" title="Español">
+            <img src="IMG/espanhol.png" alt="Español" />
+          </button>
+        </div>
+      </nav>
+      <!-- Language switcher (desktop in header) -->
+      <div class="lang-switcher desktop-only" aria-label="Selecionar idioma">
+        <button class="lang" data-lang="pt" title="Português">
+          <img src="IMG/portugues.png" alt="Português" />
+        </button>
+        <button class="lang" data-lang="en" title="English">
+          <img src="IMG/ingles.png" alt="English" />
+        </button>
+        <button class="lang" data-lang="es" title="Español">
+          <img src="IMG/espanhol.png" alt="Español" />
+        </button>
+      </div>
     </div>
-    <nav>
-      <a href="#features">Recursos</a>
-      <a href="#how">Como funciona</a>
-      <a href="#testimonials">Clientes</a>
-      <a href="#contact">Contato</a>
-      <a href="#cta-final" class="cta small">Comece Agora</a>
-    </nav>
   </header>
 
   <!-- Hero -->
   <section class="hero" id="hero">
     <div class="container hero-inner">
-      <h1 class="headline" data-animate>
+      <h1 class="headline" data-animate data-i18n="hero.headline">
         O Futuro das Transações. Conectado.
       </h1>
-      <p class="subhead" data-animate data-delay="100">
+      <p class="subhead" data-animate data-delay="100" data-i18n="hero.subhead">
         Integre nosso gateway de pagamento com segurança de ponta e processe transações na velocidade da luz.
       </p>
       <div class="hero-actions" data-animate data-delay="200">
-        <a href="#cta-final" id="cta-primary" class="cta">Comece Agora</a>
-        <a href="#how" class="link-docs">Ver Documentação</a>
+        <a href="#cta-final" id="cta-primary" class="cta" data-i18n="hero.cta">Comece Agora</a>
+        <a href="#how" class="link-docs" data-i18n="hero.docs">Ver Documentação</a>
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
@@ -57,35 +86,35 @@
 
   <!-- Features -->
   <section class="features container" id="features">
-    <h2 class="section-title" data-animate>Por que NexusPay</h2>
+    <h2 class="section-title" data-animate data-i18n="features.title">Por que NexusPay</h2>
     <div class="cards">
       <article class="card" data-animate>
         <div class="icon neon">
           <img src="IMG/segurança.png" alt="Segurança" />
         </div>
-        <h3>Segurança de Nível Superior</h3>
-        <p>Criptografia avançada, detecção de fraude em tempo real e conformidade total com PCI DSS.</p>
+        <h3 data-i18n="features.cards.security.title">Segurança de Nível Superior</h3>
+        <p data-i18n="features.cards.security.text">Criptografia avançada, detecção de fraude em tempo real e conformidade total com PCI DSS.</p>
       </article>
       <article class="card" data-animate data-delay="100">
         <div class="icon neon">
           <img src="IMG/velocidade.png" alt="Velocidade" />
         </div>
-        <h3>Velocidade de Transação</h3>
-        <p>Arquitetura de baixa latência para autorizações e liquidações em milissegundos.</p>
+        <h3 data-i18n="features.cards.speed.title">Velocidade de Transação</h3>
+        <p data-i18n="features.cards.speed.text">Arquitetura de baixa latência para autorizações e liquidações em milissegundos.</p>
       </article>
       <article class="card" data-animate data-delay="200">
         <div class="icon neon">
           <img src="IMG/integração.png" alt="Integração" />
         </div>
-        <h3>Integração Fácil</h3>
-        <p>SDKs claros e APIs REST/GraphQL com exemplos prontos e sandbox de testes.</p>
+        <h3 data-i18n="features.cards.integrations.title">Integração Fácil</h3>
+        <p data-i18n="features.cards.integrations.text">SDKs claros e APIs REST/GraphQL com exemplos prontos e sandbox de testes.</p>
       </article>
       <article class="card" data-animate data-delay="300">
         <div class="icon neon">
           <img src="IMG/taxasa.png" alt="Taxas" />
         </div>
-        <h3>Taxas Transparentes</h3>
-        <p>Sem surpresas: preços claros, relatórios detalhados e otimização de custos.</p>
+        <h3 data-i18n="features.cards.fees.title">Taxas Transparentes</h3>
+        <p data-i18n="features.cards.fees.text">Sem surpresas: preços claros, relatórios detalhados e otimização de custos.</p>
       </article>
     </div>
   </section>
@@ -93,7 +122,7 @@
   <!-- How it works -->
   <section class="how" id="how">
     <div class="container">
-      <h2 class="section-title" data-animate>Como Funciona</h2>
+      <h2 class="section-title" data-animate data-i18n="how.title">Como Funciona</h2>
       <div class="flow" data-animate>
         <svg class="flow-diagram" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
@@ -117,9 +146,9 @@
             <path class="pulse-line" d="M480 110 C 530 110, 560 110, 610 110"/>
           </g>
           <g fill="#FFFFFF">
-            <text x="110" y="118" text-anchor="middle" class="node-label">Checkout</text>
-            <text x="400" y="118" text-anchor="middle" class="node-label">NexusPay</text>
-            <text x="690" y="118" text-anchor="middle" class="node-label">Banco</text>
+            <text x="110" y="118" text-anchor="middle" class="node-label" data-i18n="how.diagram.checkout">Checkout</text>
+            <text x="400" y="118" text-anchor="middle" class="node-label" data-i18n="how.diagram.nexus">NexusPay</text>
+            <text x="690" y="118" text-anchor="middle" class="node-label" data-i18n="how.diagram.bank">Banco</text>
           </g>
         </svg>
         <div class="terminal">
@@ -148,21 +177,21 @@ console.log(result.status) // 'authorized'</code></pre>
   <!-- Testimonials -->
   <section class="testimonials" id="testimonials">
     <div class="container">
-      <h2 class="section-title" data-animate>O que dizem nossos clientes</h2>
+      <h2 class="section-title" data-animate data-i18n="testimonials.title">O que dizem nossos clientes</h2>
       <div class="carousel" data-animate>
         <button class="nav prev" aria-label="Anterior">&#10094;</button>
         <div class="track">
           <div class="slide active">
-            <p>“Aumentamos a taxa de aprovação em 14% com a NexusPay. Integração simples e performance incrível.”</p>
-            <div class="author">Marina Alves — CTO, LumenShop</div>
+            <p data-i18n="testimonials.1.text">“Aumentamos a taxa de aprovação em 14% com a NexusPay. Integração simples e performance incrível.”</p>
+            <div class="author" data-i18n="testimonials.1.author">Marina Alves — CTO, LumenShop</div>
           </div>
           <div class="slide">
-            <p>“Suporte impecável e uma plataforma robusta. A latência caiu drasticamente.”</p>
-            <div class="author">Rafael Costa — Head de Pagamentos, VelozBank</div>
+            <p data-i18n="testimonials.2.text">“Suporte impecável e uma plataforma robusta. A latência caiu drasticamente.”</p>
+            <div class="author" data-i18n="testimonials.2.author">Rafael Costa — Head de Pagamentos, VelozBank</div>
           </div>
           <div class="slide">
-            <p>“Transparência nas taxas e dashboards completos. Decisão fácil para nosso time.”</p>
-            <div class="author">Ana Ribeiro — CFO, NovaMarket</div>
+            <p data-i18n="testimonials.3.text">“Transparência nas taxas e dashboards completos. Decisão fácil para nosso time.”</p>
+            <div class="author" data-i18n="testimonials.3.author">Ana Ribeiro — CFO, NovaMarket</div>
           </div>
         </div>
         <button class="nav next" aria-label="Próximo">&#10095;</button>
@@ -173,10 +202,10 @@ console.log(result.status) // 'authorized'</code></pre>
   <!-- CTA Final -->
   <section class="cta-final" id="cta-final">
     <div class="container">
-      <h2 data-animate>Pronto para acelerar seus pagamentos?</h2>
-      <p data-animate data-delay="100">Integre o NexusPay hoje mesmo e ofereça a melhor experiência para seus clientes.</p>
+      <h2 class="section-title" data-animate data-i18n="cta.title">Pronto para acelerar seus pagamentos?</h2>
+      <p data-animate data-delay="100" data-i18n="cta.text">Integre o NexusPay hoje mesmo e ofereça a melhor experiência para seus clientes.</p>
       <div class="actions" data-animate data-delay="200">
-        <a href="#how" class="cta alt">Ver Documentação</a>
+        <a href="#how" class="cta alt" data-i18n="cta.docs">Ver Documentação</a>
       </div>
     </div>
   </section>
@@ -185,40 +214,40 @@ console.log(result.status) // 'authorized'</code></pre>
   <section class="contact" id="contact">
     <div class="container">
       <div class="contact-head">
-        <h2 data-animate>Entre em Contato</h2>
-        <p data-animate data-delay="100">Envie uma mensagem e retornaremos rapidamente pelo WhatsApp.</p>
+        <h2 class="section-title" data-animate data-i18n="contact.title">Entre em Contato</h2>
+        <p data-animate data-delay="100" data-i18n="contact.subtitle">Envie uma mensagem e retornaremos rapidamente pelo WhatsApp.</p>
       </div>
       <form id="contact-form" class="contact-form" data-animate data-delay="200">
         <div class="row">
           <label>
-            <span>Seu nome</span>
-            <input type="text" id="ct-name" name="name" placeholder="Seu nome" required />
+            <span data-i18n="contact.form.name">Seu nome</span>
+            <input type="text" id="ct-name" name="name" placeholder="Seu nome" data-i18n-placeholder="contact.form.namePlaceholder" required />
           </label>
           <label>
-            <span>E-mail</span>
-            <input type="email" id="ct-email" name="email" placeholder="voce@exemplo.com" required />
+            <span data-i18n="contact.form.email">E-mail</span>
+            <input type="email" id="ct-email" name="email" placeholder="voce@exemplo.com" data-i18n-placeholder="contact.form.emailPlaceholder" required />
           </label>
         </div>
         <label>
-          <span>Assunto</span>
-          <input type="text" id="ct-subject" name="subject" placeholder="Assunto (opcional)" />
+          <span data-i18n="contact.form.subject">Assunto</span>
+          <input type="text" id="ct-subject" name="subject" placeholder="Assunto (opcional)" data-i18n-placeholder="contact.form.subjectPlaceholder" />
         </label>
         <label>
-          <span>Mensagem</span>
-          <textarea id="ct-message" name="message" rows="4" placeholder="Conte como podemos ajudar" required></textarea>
+          <span data-i18n="contact.form.message">Mensagem</span>
+          <textarea id="ct-message" name="message" rows="4" placeholder="Conte como podemos ajudar" data-i18n-placeholder="contact.form.messagePlaceholder" required></textarea>
         </label>
-        <button type="submit" class="cta" id="ct-submit">Enviar</button>
+        <button type="submit" class="cta" id="ct-submit" data-i18n="contact.form.submit">Enviar</button>
       </form>
     </div>
   </section>
 
   <footer class="footer">
     <div class="container">
-      <span> 2023 NexusPay. Todos os direitos reservados.</span>
+      <span data-i18n="footer.copyright"> 2023 NexusPay. Todos os direitos reservados.</span>
       <div class="footer-links">
-        <a href="#">Termos</a>
-        <a href="#">Privacidade</a>
-        <a href="#">Status</a>
+        <a href="#" data-i18n="footer.terms">Termos</a>
+        <a href="#" data-i18n="footer.privacy">Privacidade</a>
+        <a href="#" data-i18n="footer.status">Status</a>
       </div>
     </div>
   </footer>

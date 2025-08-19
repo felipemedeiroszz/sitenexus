@@ -1,10 +1,59 @@
 // Utils
 const qs = (s, el=document) => el.querySelector(s)
 const qsa = (s, el=document) => [...el.querySelectorAll(s)]
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Preloader
+// Mobile Menu Toggle
+;(function mobileMenu() {
+  const toggle = qs('.mobile-menu-toggle')
+  const nav = qs('.main-nav')
+  const navLinks = qsa('.main-nav a')
+  
+  if (!toggle || !nav) return
+  
+  function toggleMenu() {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true'
+    toggle.setAttribute('aria-expanded', !expanded)
+    nav.classList.toggle('open')
+    document.body.classList.toggle('menu-open')
+    
+    // Prevent scrolling when menu is open
+    document.body.style.overflow = expanded ? '' : 'hidden'
+  }
+  
+  toggle.addEventListener('click', toggleMenu)
+  
+  // Close menu when link is clicked
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (nav.classList.contains('open')) {
+        toggleMenu()
+      }
+    })
+  })
+  
+  // Close menu on resize if device gets larger
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && nav.classList.contains('open')) {
+      toggle.setAttribute('aria-expanded', 'false')
+      nav.classList.remove('open')
+      document.body.classList.remove('menu-open')
+      document.body.style.overflow = ''
+    }
+  })
+})()
+
+
+// Preloader (fade then remove from DOM)
 window.addEventListener('load', () => {
-  setTimeout(() => qs('#preloader')?.classList.add('hidden'), 400)
+  const pre = qs('#preloader')
+  if(!pre) return
+  const hide = () => {
+    pre.classList.add('hidden')
+    const onEnd = () => { pre.remove(); pre.removeEventListener('transitionend', onEnd) }
+    pre.addEventListener('transitionend', onEnd)
+  }
+  setTimeout(hide, 400)
 })
 
 // Year in footer (optional span#year)
@@ -17,8 +66,8 @@ const yEl = qs('#year'); if (yEl) yEl.textContent = new Date().getFullYear()
   const ctx = canvas.getContext('2d')
   let w, h, ratio = window.devicePixelRatio || 1
   const P = []
-  const COUNT = 90
-  const MAX_DIST = 140
+  const COUNT = prefersReducedMotion ? 28 : 90
+  const MAX_DIST = prefersReducedMotion ? 100 : 140
 
   function resize(){
     w = canvas.width = Math.floor(innerWidth * ratio)
@@ -64,18 +113,20 @@ const yEl = qs('#year'); if (yEl) yEl.textContent = new Date().getFullYear()
       ctx.fill()
     }
 
-    // connections
-    ctx.shadowBlur = 0
-    for(let i=0;i<P.length;i++){
-      for(let j=i+1;j<P.length;j++){
-        const a=P[i], b=P[j]
-        const dx=a.x-b.x, dy=a.y-b.y
-        const d = Math.hypot(dx,dy)
-        if(d < MAX_DIST*ratio){
-          const o = 1 - d/(MAX_DIST*ratio)
-          ctx.strokeStyle = `rgba(57,255,20,${o*0.25})`
-          ctx.lineWidth = 1*ratio
-          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke()
+    // connections (skip for reduced motion)
+    if(!prefersReducedMotion){
+      ctx.shadowBlur = 0
+      for(let i=0;i<P.length;i++){
+        for(let j=i+1;j<P.length;j++){
+          const a=P[i], b=P[j]
+          const dx=a.x-b.x, dy=a.y-b.y
+          const d = Math.hypot(dx,dy)
+          if(d < MAX_DIST*ratio){
+            const o = 1 - d/(MAX_DIST*ratio)
+            ctx.strokeStyle = `rgba(57,255,20,${o*0.25})`
+            ctx.lineWidth = 1*ratio
+            ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke()
+          }
         }
       }
     }
@@ -131,7 +182,7 @@ const yEl = qs('#year'); if (yEl) yEl.textContent = new Date().getFullYear()
     ta.addEventListener('input', fit); fit()
   }
   const btn = qs('#ct-submit')
-  if(btn){
+  if(btn && !prefersReducedMotion){
     btn.addEventListener('mousemove', (e)=>{
       const r = btn.getBoundingClientRect()
       const x = ((e.clientX - r.left)/r.width*100).toFixed(2)+"%"
@@ -147,7 +198,7 @@ const yEl = qs('#year'); if (yEl) yEl.textContent = new Date().getFullYear()
 
   // Tilt effect on the contact card
   const card = qs('.contact-form')
-  if(card){
+  if(card && !prefersReducedMotion){
     const clamp = (n,min,max)=>Math.max(min,Math.min(max,n))
     card.addEventListener('mousemove', (e)=>{
       const r = card.getBoundingClientRect()
@@ -193,7 +244,7 @@ function showToast(message, type){
 ;(function plexus(){
   const el = qs('#plexus')
   if(!el) return
-  const lineCount = 24
+  const lineCount = prefersReducedMotion ? 12 : 24
   const frag = document.createDocumentFragment()
   for(let i=0;i<lineCount;i++){
     const line = document.createElement('span')
@@ -204,10 +255,41 @@ function showToast(message, type){
     line.style.height='1px'
     line.style.background='linear-gradient(90deg, rgba(57,255,20,0), rgba(57,255,20,.6), rgba(0,212,255,.0))'
     line.style.filter='drop-shadow(0 0 6px rgba(57,255,20,.8))'
-    line.style.animation = `move ${6+Math.random()*6}s linear ${Math.random()*2}s infinite alternate`
+    if(!prefersReducedMotion){
+      line.style.animation = `move ${6+Math.random()*6}s linear ${Math.random()*2}s infinite alternate`
+    }
     frag.appendChild(line)
   }
   el.appendChild(frag)
+})()
+
+// Subtle parallax for hero content
+;(function heroParallax(){
+  const hero = qs('.hero')
+  const inner = qs('.hero-inner')
+  const plexus = qs('#plexus')
+  if(!hero || !inner) return
+  if(prefersReducedMotion) return
+  let ticking = false
+  function onScroll(){
+    if(ticking) return
+    ticking = true
+    requestAnimationFrame(()=>{
+      const rect = hero.getBoundingClientRect()
+      const viewH = innerHeight || document.documentElement.clientHeight
+      const inView = rect.top < viewH && rect.bottom > 0
+      if(inView){
+        const p = (Math.min(Math.max(-rect.top, 0), rect.height)) / rect.height // 0..1
+        inner.style.transform = `translateY(${p * -8}px)`
+        if(plexus){
+          plexus.style.transform = `translate3d(0, ${p * -16}px, 0)`
+        }
+      }
+      ticking = false
+    })
+  }
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
 })()
 
 // Scroll reveal
@@ -237,21 +319,23 @@ function showToast(message, type){
   items.forEach(i=>io.observe(i))
 })()
 
-// CTA ripple / hover light
-qsa('.cta').forEach(btn=>{
-  btn.addEventListener('pointermove', (e)=>{
-    const rect = e.currentTarget.getBoundingClientRect()
-    const rx = ((e.clientX - rect.left)/rect.width*100).toFixed(2)+'%'
-    const ry = ((e.clientY - rect.top)/rect.height*100).toFixed(2)+'%'
-    e.currentTarget.style.setProperty('--rx', rx)
-    e.currentTarget.style.setProperty('--ry', ry)
+// CTA ripple / hover light (skip on reduced motion)
+if(!prefersReducedMotion){
+  qsa('.cta').forEach(btn=>{
+    btn.addEventListener('pointermove', (e)=>{
+      const rect = e.currentTarget.getBoundingClientRect()
+      const rx = ((e.clientX - rect.left)/rect.width*100).toFixed(2)+'%'
+      const ry = ((e.clientY - rect.top)/rect.height*100).toFixed(2)+'%'
+      e.currentTarget.style.setProperty('--rx', rx)
+      e.currentTarget.style.setProperty('--ry', ry)
+    })
+    btn.addEventListener('click', (e)=>{
+      e.currentTarget.classList.remove('is-rippling')
+      void e.currentTarget.offsetWidth
+      e.currentTarget.classList.add('is-rippling')
+    })
   })
-  btn.addEventListener('click', (e)=>{
-    e.currentTarget.classList.remove('is-rippling')
-    void e.currentTarget.offsetWidth
-    e.currentTarget.classList.add('is-rippling')
-  })
-})
+}
 
 // Carousel com autoplay, pausa, swipe e dots
 ;(function carousel(){
@@ -291,7 +375,7 @@ qsa('.cta').forEach(btn=>{
   let startX = 0
   let currentX = 0
   let startTransform = 0
-  const DURATION = 6000
+  const DURATION = prefersReducedMotion ? 8000 : 6000
   let startTime = performance.now()
 
   function setActive(){
@@ -398,7 +482,7 @@ qsa('.cta').forEach(btn=>{
     i++
     if(i < txt.length){
       const ch = txt[i-1]
-      const d = ch==='\n' ? 40 : 18
+      const d = prefersReducedMotion ? 0 : (ch==='\n' ? 40 : 18)
       setTimeout(step, d)
     }
   }
@@ -429,7 +513,222 @@ qsa('.cta').forEach(btn=>{
     function reset(){
       card.style.transform = ''
     }
-    card.addEventListener('pointermove', onMove)
-    card.addEventListener('pointerleave', reset)
+    if(!prefersReducedMotion){
+      card.addEventListener('pointermove', onMove)
+      card.addEventListener('pointerleave', reset)
+    }
+  })
+})()
+
+// Internationalization (i18n)
+;(function i18n(){
+  const dict = {
+    pt: {
+      'nav.features':'Recursos',
+      'nav.how':'Como funciona',
+      'nav.testimonials':'Clientes',
+      'nav.contact':'Contato',
+      'nav.start':'Comece Agora',
+      'hero.headline':'O Futuro das Transações. Conectado.',
+      'hero.subhead':'Integre nosso gateway de pagamento com segurança de ponta e processe transações na velocidade da luz.',
+      'hero.cta':'Comece Agora',
+      'hero.docs':'Ver Documentação',
+      'features.title':'Por que NexusPay',
+      'features.cards.security.title':'Segurança de Nível Superior',
+      'features.cards.security.text':'Criptografia avançada, detecção de fraude em tempo real e conformidade total com PCI DSS.',
+      'features.cards.speed.title':'Velocidade de Transação',
+      'features.cards.speed.text':'Arquitetura de baixa latência para autorizações e liquidações em milissegundos.',
+      'features.cards.integrations.title':'Integração Fácil',
+      'features.cards.integrations.text':'SDKs claros e APIs REST/GraphQL com exemplos prontos e sandbox de testes.',
+      'features.cards.fees.title':'Taxas Transparentes',
+      'features.cards.fees.text':'Sem surpresas: preços claros, relatórios detalhados e otimização de custos.',
+      'how.title':'Como Funciona',
+      'how.diagram.checkout':'Checkout',
+      'how.diagram.nexus':'NexusPay',
+      'how.diagram.bank':'Banco',
+      'testimonials.title':'O que dizem nossos clientes',
+      'testimonials.1.text':'“Aumentamos a taxa de aprovação em 14% com a NexusPay. Integração simples e performance incrível.”',
+      'testimonials.1.author':'Marina Alves — CTO, LumenShop',
+      'testimonials.2.text':'“Suporte impecável e uma plataforma robusta. A latência caiu drasticamente.”',
+      'testimonials.2.author':'Rafael Costa — Head de Pagamentos, VelozBank',
+      'testimonials.3.text':'“Transparência nas taxas e dashboards completos. Decisão fácil para nosso time.”',
+      'testimonials.3.author':'Ana Ribeiro — CFO, NovaMarket',
+      'cta.title':'Pronto para acelerar seus pagamentos?',
+      'cta.text':'Integre o NexusPay hoje mesmo e ofereça a melhor experiência para seus clientes.',
+      'cta.docs':'Ver Documentação',
+      'contact.title':'Entre em Contato',
+      'contact.subtitle':'Envie uma mensagem e retornaremos rapidamente pelo WhatsApp.',
+      'contact.form.name':'Seu nome',
+      'contact.form.namePlaceholder':'Seu nome',
+      'contact.form.email':'E-mail',
+      'contact.form.emailPlaceholder':'voce@exemplo.com',
+      'contact.form.subject':'Assunto',
+      'contact.form.subjectPlaceholder':'Assunto (opcional)',
+      'contact.form.message':'Mensagem',
+      'contact.form.messagePlaceholder':'Conte como podemos ajudar',
+      'contact.form.submit':'Enviar',
+      'footer.terms':'Termos',
+      'footer.privacy':'Privacidade',
+      'footer.status':'Status',
+      'footer.copyright':' 2023 NexusPay. Todos os direitos reservados.'
+    },
+    en: {
+      'nav.features':'Features',
+      'nav.how':'How it works',
+      'nav.testimonials':'Customers',
+      'nav.contact':'Contact',
+      'nav.start':'Get Started',
+      'hero.headline':'The Future of Transactions. Connected.',
+      'hero.subhead':'Integrate our payment gateway with top-tier security and process transactions at the speed of light.',
+      'hero.cta':'Get Started',
+      'hero.docs':'See Docs',
+      'features.title':'Why NexusPay',
+      'features.cards.security.title':'Enterprise-grade Security',
+      'features.cards.security.text':'Advanced encryption, real-time fraud detection, and full PCI DSS compliance.',
+      'features.cards.speed.title':'Transaction Speed',
+      'features.cards.speed.text':'Low-latency architecture for millisecond authorizations and settlements.',
+      'features.cards.integrations.title':'Easy Integration',
+      'features.cards.integrations.text':'Clear SDKs and REST/GraphQL APIs with ready examples and sandbox.',
+      'features.cards.fees.title':'Transparent Fees',
+      'features.cards.fees.text':'No surprises: clear pricing, detailed reports, and cost optimization.',
+      'how.title':'How It Works',
+      'how.diagram.checkout':'Checkout',
+      'how.diagram.nexus':'NexusPay',
+      'how.diagram.bank':'Bank',
+      'testimonials.title':'What our customers say',
+      'testimonials.1.text':'“We increased approval rate by 14% with NexusPay. Simple integration and amazing performance.”',
+      'testimonials.1.author':'Marina Alves — CTO, LumenShop',
+      'testimonials.2.text':'“Impeccable support and a robust platform. Latency dropped drastically.”',
+      'testimonials.2.author':'Rafael Costa — Head of Payments, VelozBank',
+      'testimonials.3.text':'“Transparent fees and complete dashboards. An easy decision for our team.”',
+      'testimonials.3.author':'Ana Ribeiro — CFO, NovaMarket',
+      'cta.title':'Ready to accelerate your payments?',
+      'cta.text':'Integrate NexusPay today and deliver the best experience to your customers.',
+      'cta.docs':'See Docs',
+      'contact.title':'Get in touch',
+      'contact.subtitle':'Send a message and we will quickly reply via WhatsApp.',
+      'contact.form.name':'Your name',
+      'contact.form.namePlaceholder':'Your name',
+      'contact.form.email':'Email',
+      'contact.form.emailPlaceholder':'you@example.com',
+      'contact.form.subject':'Subject',
+      'contact.form.subjectPlaceholder':'Subject (optional)',
+      'contact.form.message':'Message',
+      'contact.form.messagePlaceholder':'Tell us how we can help',
+      'contact.form.submit':'Send',
+      'footer.terms':'Terms',
+      'footer.privacy':'Privacy',
+      'footer.status':'Status',
+      'footer.copyright':' 2023 NexusPay. All rights reserved.'
+    },
+    es: {
+      'nav.features':'Recursos',
+      'nav.how':'Cómo funciona',
+      'nav.testimonials':'Clientes',
+      'nav.contact':'Contacto',
+      'nav.start':'Comenzar',
+      'hero.headline':'El futuro de las transacciones. Conectado.',
+      'hero.subhead':'Integra nuestro gateway de pago con seguridad de primer nivel y procesa transacciones a la velocidad de la luz.',
+      'hero.cta':'Comenzar',
+      'hero.docs':'Ver Documentación',
+      'features.title':'Por qué NexusPay',
+      'features.cards.security.title':'Seguridad de nivel superior',
+      'features.cards.security.text':'Cifrado avanzado, detección de fraude en tiempo real y cumplimiento total de PCI DSS.',
+      'features.cards.speed.title':'Velocidad de transacción',
+      'features.cards.speed.text':'Arquitectura de baja latencia para autorizaciones y liquidaciones en milisegundos.',
+      'features.cards.integrations.title':'Integración fácil',
+      'features.cards.integrations.text':'SDKs claros y APIs REST/GraphQL con ejemplos listos y sandbox de pruebas.',
+      'features.cards.fees.title':'Tarifas transparentes',
+      'features.cards.fees.text':'Sin sorpresas: precios claros, informes detallados y optimización de costos.',
+      'how.title':'Cómo funciona',
+      'how.diagram.checkout':'Checkout',
+      'how.diagram.nexus':'NexusPay',
+      'how.diagram.bank':'Banco',
+      'testimonials.title':'Qué dicen nuestros clientes',
+      'testimonials.1.text':'“Aumentamos la tasa de aprobación en 14% con NexusPay. Integración simple y rendimiento increíble.”',
+      'testimonials.1.author':'Marina Alves — CTO, LumenShop',
+      'testimonials.2.text':'“Soporte impecable y una plataforma robusta. La latencia cayó drásticamente.”',
+      'testimonials.2.author':'Rafael Costa — Head de Pagos, VelozBank',
+      'testimonials.3.text':'“Transparencia en tarifas y paneles completos. Decisión fácil para nuestro equipo.”',
+      'testimonials.3.author':'Ana Ribeiro — CFO, NovaMarket',
+      'cta.title':'¿Listo para acelerar tus pagos?',
+      'cta.text':'Integra NexusPay hoy y ofrece la mejor experiencia a tus clientes.',
+      'cta.docs':'Ver Documentación',
+      'contact.title':'Ponte en contacto',
+      'contact.subtitle':'Envíanos un mensaje y responderemos rápidamente por WhatsApp.',
+      'contact.form.name':'Tu nombre',
+      'contact.form.namePlaceholder':'Tu nombre',
+      'contact.form.email':'Correo electrónico',
+      'contact.form.emailPlaceholder':'tu@ejemplo.com',
+      'contact.form.subject':'Asunto',
+      'contact.form.subjectPlaceholder':'Asunto (opcional)',
+      'contact.form.message':'Mensaje',
+      'contact.form.messagePlaceholder':'Cuéntanos cómo podemos ayudar',
+      'contact.form.submit':'Enviar',
+      'footer.terms':'Términos',
+      'footer.privacy':'Privacidad',
+      'footer.status':'Estado',
+      'footer.copyright':' 2023 NexusPay. Todos los derechos reservados.'
+    }
+  }
+
+  const htmlEl = document.documentElement
+  const keyEls = () => qsa('[data-i18n]')
+  const phEls = () => qsa('[data-i18n-placeholder]')
+
+  function applyTranslations(lang){
+    const table = dict[lang] || dict.pt
+    keyEls().forEach(el=>{
+      const key = el.getAttribute('data-i18n')
+      if(table[key] !== undefined){
+        el.textContent = table[key]
+      }
+    })
+    phEls().forEach(el=>{
+      const key = el.getAttribute('data-i18n-placeholder')
+      if(table[key] !== undefined){
+        el.setAttribute('placeholder', table[key])
+      }
+    })
+    htmlEl.setAttribute('lang', lang)
+  }
+
+  function setActive(lang){
+    qsa('.lang-switcher .lang').forEach(btn=>{
+      btn.classList.toggle('active', btn.getAttribute('data-lang')===lang)
+    })
+  }
+
+  function setLang(lang){
+    localStorage.setItem('lang', lang)
+    applyTranslations(lang)
+    setActive(lang)
+  }
+
+  // Initialize
+  const saved = localStorage.getItem('lang')
+  const browser = (navigator.language || 'pt').slice(0,2)
+  const initial = saved && dict[saved] ? saved : (dict[browser] ? browser : 'pt')
+  applyTranslations(initial)
+  setActive(initial)
+  htmlEl.setAttribute('lang', initial)
+
+  // Events
+  qsa('.lang-switcher .lang').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const lang = btn.getAttribute('data-lang')
+      if(!dict[lang]) return
+      setLang(lang)
+      // close mobile menu if open
+      const toggle = qs('.mobile-menu-toggle')
+      const nav = qs('.main-nav')
+      const isOpen = nav && nav.classList.contains('open')
+      if(isOpen){
+        toggle?.setAttribute('aria-expanded', 'false')
+        nav.classList.remove('open')
+        document.body.classList.remove('menu-open')
+        document.body.style.overflow = ''
+      }
+    })
   })
 })()
