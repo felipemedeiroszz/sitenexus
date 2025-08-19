@@ -18,5 +18,5 @@
     <path d="M58 64 L128 32 L198 64 L198 192 L128 224 L58 192 Z" fill="rgba(57,255,20,0.06)"/>
     <path d="M90 184 L90 80 L166 176 L166 72" stroke-linecap="round"/>
   </g>
-  <text x="128" y="244" text-anchor="middle" font-family="Orbitron, Arial" font-weight="800" font-size="24" fill="#39FF14">NexusPay</text>
+  <text x="128" y="244" text-anchor="middle" font-family="Orbitron, Arial" font-weight="800" font-size="24" fill="#39FF14">Baluarte Pay</text>
 </svg>
